@@ -1,4 +1,5 @@
 import { Navigate, useRoutes } from 'react-router-dom';
+import { isLoggedIn } from './utils/token';
 // layouts
 import DashboardLayout from './layouts/dashboard';
 import SimpleLayout from './layouts/simple';
@@ -13,7 +14,7 @@ import DashboardAppPage from './pages/DashboardAppPage';
 // ----------------------------------------------------------------------
 
 export default function Router() {
-  const routes = useRoutes([
+  const userRoutes = [
     {
       path: '/dashboard',
       element: <DashboardLayout />,
@@ -41,7 +42,26 @@ export default function Router() {
       path: '*',
       element: <Navigate to="/404" replace />,
     },
-  ]);
+  ];
+  const guestRoutes = [
+    {
+      path: 'login',
+      element: <LoginPage />,
+    },
+    {
+      element: <SimpleLayout />,
+      children: [
+        { element: <Navigate to="login" />, index: true },
+        { path: '404', element: <Page404 /> },
+        { path: '*', element: <Navigate to="/404" /> },
+      ],
+    },
+    {
+      path: '*',
+      element: <Navigate to="/404" replace />,
+    },
+  ];
+  const routes = useRoutes(isLoggedIn ? userRoutes : guestRoutes);
 
   return routes;
 }
