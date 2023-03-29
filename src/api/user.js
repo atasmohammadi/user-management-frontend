@@ -1,17 +1,16 @@
 import http from '../utils/http';
-import { isLoggedIn } from '../utils/token';
 
-export const getUser = (id) => {
-  if (!isLoggedIn) throw new Error('Unauthorized');
-  return http.get(`/user/${id}`);
+export const getUser = async (id) => {
+  const res = await http.get(`/user/${id}`);
+  return res.data;
 };
 
-export const getUsers = () => {
-  if (!isLoggedIn) throw new Error('Unauthorized');
-  return http.get(`/user`);
+export const getUsers = async () => {
+  const res = await http.get(`/user`);
+  return res.data;
 };
 
-export const updateUser = (params) => {
-  if (!isLoggedIn) throw new Error('Unauthorized');
-  return http.put(`/user`, params);
+export const updateUser = async (params) => {
+  const res = await http.put(`/user`, params);
+  return res.data;
 };

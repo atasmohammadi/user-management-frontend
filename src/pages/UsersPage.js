@@ -1,5 +1,4 @@
 import { Helmet } from 'react-helmet-async';
-import { filter } from 'lodash';
 import { useState } from 'react';
 // @mui
 import {
@@ -28,49 +27,18 @@ import Scrollbar from '../components/scrollbar';
 import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
 // mock
 // import data from '../_mock/user';
-import { useEmployees } from '../hooks/useEmployee';
+import { useUsers } from '../hooks/useUsers';
+import { applySortFilter, getComparator } from '../utils/listHelpers';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'firstName', label: 'First Name', alignRight: false },
-  { id: 'lastName', label: 'Last Name', alignRight: false },
-  { id: 'jobTitle', label: 'Job title', alignRight: false },
-  { id: 'department', label: 'Department', alignRight: false },
+  { id: 'email', label: 'Email', alignRight: false },
+  { id: 'permissions', label: 'Permissions', alignRight: false },
   { id: '' },
 ];
 
 // ----------------------------------------------------------------------
-
-function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
-
-function getComparator(order, orderBy) {
-  return order === 'desc'
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-function applySortFilter(array, comparator, query) {
-  if (!Array.isArray(array)) return [];
-  const stabilizedThis = array.map((el, index) => [el, index]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) return order;
-    return a[1] - b[1];
-  });
-  if (query) {
-    return filter(array, (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
-  }
-  return stabilizedThis.map((el) => el[0]);
-}
 
 export default function UserPage() {
   const [open, setOpen] = useState(null);
@@ -80,7 +48,7 @@ export default function UserPage() {
   const [orderBy, setOrderBy] = useState('name');
   const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const { data, isLoading, isError, error } = useEmployees();
+  const { data, isLoading, isError, error } = useUsers();
 
   const handleOpenMenu = (event) => {
     setOpen(event.currentTarget);
@@ -98,18 +66,18 @@ export default function UserPage() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = data.map((n) => n.name);
+      const newSelecteds = data.map((n) => n.id);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (event, id) => {
+    const selectedIndex = selected.indexOf(id);
     let newSelected = [];
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected, id);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -136,7 +104,7 @@ export default function UserPage() {
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
 
-  const filteredUsers = applySortFilter(data, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(data, getComparator(order, orderBy), filterName, ['email']);
 
   const isNotFound = !filteredUsers.length && !!filterName;
 
@@ -145,17 +113,14 @@ export default function UserPage() {
   return (
     <>
       <Helmet>
-        <title>Employees</title>
+        <title>Users</title>
       </Helmet>
 
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Employees
+            Users
           </Typography>
-          <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
-            New Employee
-          </Button>
         </Stack>
 
         <Card>
@@ -175,7 +140,7 @@ export default function UserPage() {
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, firstName, lastName, jobTitle, department } = row;
+                    const { id, email, permissions } = row;
                     const selectedUser = selected.indexOf(id) !== -1;
 
                     return (
@@ -186,20 +151,14 @@ export default function UserPage() {
 
                         <TableCell component="th" scope="row" padding="none">
                           <Stack direction="row" alignItems="center" spacing={2}>
-                            <Avatar alt={firstName} /** src */ />
+                            <Avatar alt={email} /** src */ />
                             <Typography variant="subtitle2" noWrap>
-                              {firstName}
+                              {email}
                             </Typography>
                           </Stack>
                         </TableCell>
 
-                        <TableCell align="left">{lastName}</TableCell>
-                        <TableCell align="left">{jobTitle}</TableCell>
-                        <TableCell align="left">{department.name}</TableCell>
-
-                        {/* <TableCell align="left">
-                          <Label color={(status === 'banned' && 'error') || 'success'}>{sentenceCase(status)}</Label>
-                        </TableCell> */}
+                        <TableCell align="left">{permissions.join(', ')}</TableCell>
 
                         <TableCell align="right">
                           <IconButton size="large" color="inherit" onClick={handleOpenMenu}>

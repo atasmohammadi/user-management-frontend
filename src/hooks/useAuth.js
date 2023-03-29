@@ -20,8 +20,8 @@ export const AuthProvider = ({ children }) => {
       });
       if (res.data && res.data.token) {
         showSnackbar('Logged in successfully', 'success');
-        setUser(res.data.token);
-        navigate('/dashboard');
+        setUser(res.data);
+        navigate('/');
         return res.data;
       }
       throw new Error(res.message);
@@ -42,7 +42,7 @@ export const AuthProvider = ({ children }) => {
       if (res.data && res.data.token) {
         showSnackbar('Registered successfully', 'success');
         setUser(res.data.token);
-        navigate('/dashboard');
+        navigate('/');
         return res.data;
       }
       throw new Error(res.message);

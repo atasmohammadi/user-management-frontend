@@ -3,7 +3,7 @@ import { getEmployee, getEmployees, createEmployee, updateEmployee } from '../ap
 
 export const useEmployees = () => useQuery({ queryKey: ['employees'], queryFn: getEmployees });
 
-export const useEmployee = (id) => useQuery({ queryKey: ['employee'], queryFn: () => getEmployee(id) });
+export const useEmployee = (id) => useQuery({ queryKey: ['employee', id], queryFn: () => getEmployee(id) });
 
 export const useEmployeesMutation = () => {
   const queryClient = useQueryClient();
