@@ -42,13 +42,13 @@ const StyledContent = styled('div')(({ theme }) => ({
 
 export default function LoginPage() {
   const mdUp = useResponsive('up', 'md');
-  const [isLogin, setIsLogin] = useState(true);
-  const toggle = () => setIsLogin((i) => !i);
+  const [isLoginForm, setisLoginForm] = useState(true);
+  const toggle = () => setisLoginForm((i) => !i);
 
   return (
     <>
       <Helmet>
-        <title>{isLogin ? 'Login' : 'Register'}</title>
+        <title>{isLoginForm ? 'Login' : 'Register'}</title>
       </Helmet>
 
       <StyledRoot>
@@ -63,7 +63,7 @@ export default function LoginPage() {
         {mdUp && (
           <StyledSection>
             <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5 }}>
-              {isLogin ? 'Hi, Welcome Back' : `Hi, Let's get started`}
+              {isLoginForm ? 'Hi, Welcome Back' : `Hi, Let's get started`}
             </Typography>
             <img src="/assets/illustrations/illustration_login.png" alt="login" />
           </StyledSection>
@@ -72,17 +72,17 @@ export default function LoginPage() {
         <Container maxWidth="sm">
           <StyledContent>
             <Typography variant="h4" gutterBottom>
-              {isLogin ? 'Sign in' : `Register`}
+              {isLoginForm ? 'Sign in' : `Register`}
             </Typography>
 
             <Typography variant="body2" sx={{ mb: 5 }}>
-              {isLogin ? `Don’t have an account?` : `Already have an account?`} {''}
+              {isLoginForm ? `Don’t have an account?` : `Already have an account?`} {''}
               <Link variant="subtitle2" onClick={toggle}>
-                {isLogin ? `Get started` : `Use existing account`}
+                {isLoginForm ? `Get started` : `Use existing account`}
               </Link>
             </Typography>
 
-            <LoginForm isLogin={isLogin} />
+            <LoginForm isLoginForm={isLoginForm} />
           </StyledContent>
         </Container>
       </StyledRoot>
