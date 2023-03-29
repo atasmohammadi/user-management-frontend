@@ -1,0 +1,26 @@
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { getEmployee, getEmployees, createEmployee, updateEmployee } from '../api/employee';
+
+export const useEmployees = () => useQuery({ queryKey: ['employees'], queryFn: getEmployees });
+
+export const useEmployee = (id) => useQuery({ queryKey: ['employee'], queryFn: () => getEmployee(id) });
+
+export const useEmployeesMutation = () => {
+  const queryClient = useQueryClient();
+
+  const create = useMutation({
+    mutationFn: createEmployee,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['employees'] });
+    },
+  });
+
+  const update = useMutation({
+    mutationFn: updateEmployee,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['employees'] });
+    },
+  });
+
+  return [create, update];
+};

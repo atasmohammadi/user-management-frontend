@@ -3,12 +3,12 @@ import { Navigate, useRoutes } from 'react-router-dom';
 import DashboardLayout from './layouts/dashboard';
 import SimpleLayout from './layouts/simple';
 //
-import BlogPage from './pages/BlogPage';
-import UserPage from './pages/UserPage';
+import LogsPage from './pages/LogsPage';
+import UsersPage from './pages/UsersPage';
 import LoginPage from './pages/LoginPage';
 import Page404 from './pages/Page404';
-import ProductsPage from './pages/ProductsPage';
-import DashboardAppPage from './pages/DashboardAppPage';
+import DepartmentsPage from './pages/DepartmentsPage';
+import EmployeesPage from './pages/EmployeesPage';
 
 import ProtectedComponent from './components/protected-component';
 
@@ -17,18 +17,18 @@ import ProtectedComponent from './components/protected-component';
 export default function Router() {
   const routes = useRoutes([
     {
-      path: '/dashboard',
+      path: '/',
       element: (
         <ProtectedComponent>
           <DashboardLayout />
         </ProtectedComponent>
       ),
       children: [
-        { element: <Navigate to="/dashboard/user" />, index: true },
-        { path: 'app', element: <DashboardAppPage /> },
-        { path: 'user', element: <UserPage /> },
-        { path: 'products', element: <ProductsPage /> },
-        { path: 'blog', element: <BlogPage /> },
+        { element: <Navigate to="/employees" />, index: true },
+        { path: 'users', element: <UsersPage /> },
+        { path: 'employees', element: <EmployeesPage /> },
+        { path: 'departments', element: <DepartmentsPage /> },
+        { path: 'logs', element: <LogsPage /> },
       ],
     },
     {
@@ -38,7 +38,7 @@ export default function Router() {
     {
       element: <SimpleLayout />,
       children: [
-        { element: <Navigate to="/dashboard/user" />, index: true },
+        { element: <Navigate to="/" />, index: true },
         { path: '404', element: <Page404 /> },
         { path: '*', element: <Navigate to="/404" /> },
       ],

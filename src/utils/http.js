@@ -1,5 +1,14 @@
 import axios from 'axios';
-import { getToken, removeToken } from './token';
+
+const getToken = () => {
+  const value = window.localStorage.getItem('user');
+  if (value) {
+    return JSON.parse(value);
+  }
+  return null;
+};
+
+const removeToken = () => localStorage.removeItem('user');
 
 const instance = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
