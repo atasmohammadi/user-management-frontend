@@ -1,17 +1,21 @@
 import http from '../utils/http';
 
-export const getDepartment = (id) => {
-  return http.get(`/department/${id}`);
+export const getDepartment = async (id) => {
+  const res = await http.get(`/department/${id}`);
+  return res.data;
 };
 
-export const getDepartments = () => {
-  return http.get(`/department`);
+export const getDepartments = async () => {
+  const res = await http.get(`/department`);
+  return res.data;
 };
 
-export const updateDepartment = (params) => {
-  return http.put(`/department`, params);
+export const updateDepartment = async (params) => {
+  const res = await http.put(`/department`, params);
+  return res.data;
 };
 
-export const createDepartment = (params) => {
-  return http.post(`/department`, params);
+export const createDepartment = async (params) => {
+  const res = await http.post(`/department`, params);
+  return res.data;
 };

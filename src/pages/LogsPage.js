@@ -27,22 +27,23 @@ import Scrollbar from '../components/scrollbar';
 import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
 // mock
 // import data from '../_mock/user';
-import { useEmployees } from '../hooks/useEmployees';
+import { useLogs } from '../hooks/useLogs';
 import { applySortFilter, getComparator } from '../utils/listHelpers';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'firstName', label: 'First Name', alignRight: false },
-  { id: 'lastName', label: 'Last Name', alignRight: false },
-  { id: 'jobTitle', label: 'Job title', alignRight: false },
+  { id: 'employee', label: 'Employee', alignRight: false },
+  { id: 'time', label: 'Time', alignRight: false },
+  { id: 'user', label: 'User', alignRight: false },
+  { id: 'action', label: 'Action', alignRight: false },
   { id: 'department', label: 'Department', alignRight: false },
   { id: '' },
 ];
 
 // ----------------------------------------------------------------------
 
-export default function EmployeesPage() {
+export default function LogsPage() {
   const [open, setOpen] = useState(null);
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
@@ -50,7 +51,7 @@ export default function EmployeesPage() {
   const [orderBy, setOrderBy] = useState('name');
   const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const { data, isLoading, isError, error } = useEmployees();
+  const { data, isLoading, isError, error } = useLogs();
 
   const handleOpenMenu = (event) => {
     setOpen(event.currentTarget);
@@ -106,7 +107,13 @@ export default function EmployeesPage() {
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
 
-  const filteredUsers = applySortFilter(data, getComparator(order, orderBy), filterName, ['firstName']);
+  const filteredUsers = applySortFilter(data, getComparator(order, orderBy), filterName, [
+    'employee.firstName',
+    'employee.lastName',
+    'department.name',
+    'action',
+    'user.email',
+  ]);
 
   const isNotFound = !filteredUsers.length && !!filterName;
 
@@ -115,17 +122,14 @@ export default function EmployeesPage() {
   return (
     <>
       <Helmet>
-        <title>Employees</title>
+        <title>Logs</title>
       </Helmet>
 
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Employees
+            Logs
           </Typography>
-          <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
-            New Employee
-          </Button>
         </Stack>
 
         <Card>
@@ -145,26 +149,27 @@ export default function EmployeesPage() {
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, firstName, lastName, jobTitle, department } = row;
-                    const selectedUser = selected.indexOf(id) !== -1;
+                    const { id, time, user, action, employee, department } = row;
+                    const selectedItem = selected.indexOf(id) !== -1;
 
                     return (
-                      <TableRow hover key={id} tabIndex={-1} role="checkbox" selected={selectedUser}>
+                      <TableRow hover key={id} tabIndex={-1} role="checkbox" selected={selectedItem}>
                         <TableCell padding="checkbox">
-                          <Checkbox checked={selectedUser} onChange={(event) => handleClick(event, id)} />
+                          <Checkbox checked={selectedItem} onChange={(event) => handleClick(event, id)} />
                         </TableCell>
-
                         <TableCell component="th" scope="row" padding="none">
                           <Stack direction="row" alignItems="center" spacing={2}>
-                            <Avatar alt={firstName} /** src */ />
+                            <Avatar alt={employee.firstName} /** src */ />
                             <Typography variant="subtitle2" noWrap>
-                              {firstName}
+                              {employee.firstName} {employee.lastName}
                             </Typography>
                           </Stack>
                         </TableCell>
 
-                        <TableCell align="left">{lastName}</TableCell>
-                        <TableCell align="left">{jobTitle}</TableCell>
+                        <TableCell align="left">{new Date(time).toLocaleString()}</TableCell>
+                        <TableCell align="left">{user.email}</TableCell>
+                        <TableCell align="left">{action}</TableCell>
+
                         <TableCell align="left">{department.name}</TableCell>
 
                         {/* <TableCell align="left">

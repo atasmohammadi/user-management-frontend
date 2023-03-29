@@ -1,9 +1,11 @@
 import http from '../utils/http';
 
-export const getLog = (id) => {
-  return http.get(`/log/${id}`);
+export const getLog = async (id) => {
+  const res = await http.get(`/log/${id}`);
+  return res.data;
 };
 
-export const getLogs = () => {
-  return http.get(`/log`);
+export const getLogs = async () => {
+  const res = await http.get(`/log`);
+  return res.data;
 };

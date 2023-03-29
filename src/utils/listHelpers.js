@@ -1,3 +1,5 @@
+import lodash from 'lodash';
+
 export function applySortFilter(array, comparator, query, searchBy) {
   if (!Array.isArray(array)) return [];
   const stabilizedThis = array.map((el, index) => [el, index]);
@@ -10,7 +12,12 @@ export function applySortFilter(array, comparator, query, searchBy) {
     const filterFn = (data) => {
       let found = false;
       searchBy.forEach((s) => {
-        if (data[s].toLowerCase().indexOf(query.toLowerCase()) !== -1) {
+        if (
+          lodash
+            .get(data, Array.isArray(s) ? s.split('.') : s)
+            .toLowerCase()
+            .indexOf(query.toLowerCase()) !== -1
+        ) {
           found = true;
         }
       });

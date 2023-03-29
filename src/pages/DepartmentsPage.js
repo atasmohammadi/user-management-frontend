@@ -27,22 +27,16 @@ import Scrollbar from '../components/scrollbar';
 import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
 // mock
 // import data from '../_mock/user';
-import { useEmployees } from '../hooks/useEmployees';
+import { useDepartments } from '../hooks/useDepartments';
 import { applySortFilter, getComparator } from '../utils/listHelpers';
 
 // ----------------------------------------------------------------------
 
-const TABLE_HEAD = [
-  { id: 'firstName', label: 'First Name', alignRight: false },
-  { id: 'lastName', label: 'Last Name', alignRight: false },
-  { id: 'jobTitle', label: 'Job title', alignRight: false },
-  { id: 'department', label: 'Department', alignRight: false },
-  { id: '' },
-];
+const TABLE_HEAD = [{ id: 'name', label: 'Name', alignRight: false }, { id: '' }];
 
 // ----------------------------------------------------------------------
 
-export default function EmployeesPage() {
+export default function DepartmentsPage() {
   const [open, setOpen] = useState(null);
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
@@ -50,7 +44,7 @@ export default function EmployeesPage() {
   const [orderBy, setOrderBy] = useState('name');
   const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const { data, isLoading, isError, error } = useEmployees();
+  const { data, isLoading, isError, error } = useDepartments();
 
   const handleOpenMenu = (event) => {
     setOpen(event.currentTarget);
@@ -106,7 +100,7 @@ export default function EmployeesPage() {
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
 
-  const filteredUsers = applySortFilter(data, getComparator(order, orderBy), filterName, ['firstName']);
+  const filteredUsers = applySortFilter(data, getComparator(order, orderBy), filterName, ['name']);
 
   const isNotFound = !filteredUsers.length && !!filterName;
 
@@ -115,16 +109,16 @@ export default function EmployeesPage() {
   return (
     <>
       <Helmet>
-        <title>Employees</title>
+        <title>Departments</title>
       </Helmet>
 
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Employees
+            Departments
           </Typography>
           <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
-            New Employee
+            New Department
           </Button>
         </Stack>
 
@@ -145,27 +139,23 @@ export default function EmployeesPage() {
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, firstName, lastName, jobTitle, department } = row;
-                    const selectedUser = selected.indexOf(id) !== -1;
+                    const { id, name } = row;
+                    const selectedItem = selected.indexOf(id) !== -1;
 
                     return (
-                      <TableRow hover key={id} tabIndex={-1} role="checkbox" selected={selectedUser}>
+                      <TableRow hover key={id} tabIndex={-1} role="checkbox" selected={selectedItem}>
                         <TableCell padding="checkbox">
-                          <Checkbox checked={selectedUser} onChange={(event) => handleClick(event, id)} />
+                          <Checkbox checked={selectedItem} onChange={(event) => handleClick(event, id)} />
                         </TableCell>
 
                         <TableCell component="th" scope="row" padding="none">
                           <Stack direction="row" alignItems="center" spacing={2}>
-                            <Avatar alt={firstName} /** src */ />
+                            {/* <Avatar alt={name} src /> */}
                             <Typography variant="subtitle2" noWrap>
-                              {firstName}
+                              {name}
                             </Typography>
                           </Stack>
                         </TableCell>
-
-                        <TableCell align="left">{lastName}</TableCell>
-                        <TableCell align="left">{jobTitle}</TableCell>
-                        <TableCell align="left">{department.name}</TableCell>
 
                         {/* <TableCell align="left">
                           <Label color={(status === 'banned' && 'error') || 'success'}>{sentenceCase(status)}</Label>
