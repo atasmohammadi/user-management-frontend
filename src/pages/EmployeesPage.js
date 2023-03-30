@@ -116,7 +116,12 @@ export default function EmployeesPage() {
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
 
-  const filteredUsers = applySortFilter(data, getComparator(order, orderBy), filterName, ['firstName']);
+  const filteredUsers = applySortFilter(data, getComparator(order, orderBy), filterName, [
+    'firstName',
+    'lastName',
+    'jobTitle',
+    'department.name',
+  ]);
 
   const isNotFound = !filteredUsers.length && !!filterName;
 

@@ -35,10 +35,12 @@ export function getComparator(order, orderBy) {
 }
 
 export function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
+  const compA = a[orderBy] instanceof Object ? a[orderBy].name || a[orderBy] : a[orderBy];
+  const compB = b[orderBy] instanceof Object ? b[orderBy].name || b[orderBy] : b[orderBy];
+  if (compB < compA) {
     return -1;
   }
-  if (b[orderBy] > a[orderBy]) {
+  if (compB > compA) {
     return 1;
   }
   return 0;
