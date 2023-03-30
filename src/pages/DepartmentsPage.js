@@ -128,7 +128,11 @@ export default function DepartmentsPage() {
           <Typography variant="h4" gutterBottom>
             Departments
           </Typography>
-          <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
+          <Button
+            variant="contained"
+            startIcon={<Iconify icon="eva:plus-fill" />}
+            onClick={() => navigate('/newDepartment')}
+          >
             New Department
           </Button>
         </Stack>

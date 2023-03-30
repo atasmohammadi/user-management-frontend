@@ -133,7 +133,11 @@ export default function EmployeesPage() {
           <Typography variant="h4" gutterBottom>
             Employees
           </Typography>
-          <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
+          <Button
+            variant="contained"
+            startIcon={<Iconify icon="eva:plus-fill" />}
+            onClick={() => navigate('/newEmployee')}
+          >
             New Employee
           </Button>
         </Stack>
@@ -176,10 +180,6 @@ export default function EmployeesPage() {
                         <TableCell align="left">{lastName}</TableCell>
                         <TableCell align="left">{jobTitle}</TableCell>
                         <TableCell align="left">{department.name}</TableCell>
-
-                        {/* <TableCell align="left">
-                          <Label color={(status === 'banned' && 'error') || 'success'}>{sentenceCase(status)}</Label>
-                        </TableCell> */}
 
                         <TableCell align="right">
                           <IconButton size="large" color="inherit" onClick={(event) => handleOpenMenu(event, id)}>

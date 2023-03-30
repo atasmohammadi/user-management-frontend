@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getEmployee, getEmployees, createEmployee, updateEmployee, deleteEmployee } from '../api/employee';
+import { useSnackbar } from './useSnackbar';
 
 export const useEmployees = () => useQuery({ queryKey: ['employees'], queryFn: getEmployees });
 
@@ -7,11 +8,13 @@ export const useEmployee = (id) => useQuery({ queryKey: ['employee', id], queryF
 
 export const useEmployeesMutation = () => {
   const queryClient = useQueryClient();
+  const { showSnackbar } = useSnackbar();
 
   const create = useMutation({
     mutationFn: createEmployee,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['employees'] });
+      showSnackbar('Employee created successfully', 'success');
     },
   });
 
@@ -19,6 +22,7 @@ export const useEmployeesMutation = () => {
     mutationFn: updateEmployee,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['employees'] });
+      showSnackbar('Employee updated successfully', 'success');
     },
   });
 
@@ -26,6 +30,7 @@ export const useEmployeesMutation = () => {
     mutationFn: deleteEmployee,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['employees'] });
+      showSnackbar('Employee deleted successfully', 'success');
     },
   });
 
