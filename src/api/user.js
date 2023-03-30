@@ -11,6 +11,7 @@ export const getUsers = async () => {
 };
 
 export const updateUser = async (params) => {
+  console.log('update user params', params);
   const res = await http.put(`/user`, params);
   return res.data;
 };

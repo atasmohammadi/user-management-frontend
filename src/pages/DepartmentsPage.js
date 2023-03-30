@@ -21,12 +21,12 @@ import {
   TablePagination,
 } from '@mui/material';
 // components
+import { useNavigate } from 'react-router-dom';
 import Iconify from '../components/iconify';
 import Scrollbar from '../components/scrollbar';
 // sections
 import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
 // mock
-// import data from '../_mock/user';
 import { useDepartments, useDepartmentsMutation } from '../hooks/useDepartments';
 import { applySortFilter, getComparator } from '../utils/listHelpers';
 
@@ -46,6 +46,7 @@ export default function DepartmentsPage() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const { data, isLoading, isError, error } = useDepartments();
   const { remove } = useDepartmentsMutation();
+  const navigate = useNavigate();
 
   const handleOpenMenu = (event, id) => {
     setOpen([event.currentTarget, id]);
@@ -105,7 +106,7 @@ export default function DepartmentsPage() {
   };
 
   const onEdit = () => {
-    console.log(open[1]);
+    navigate(`/editDepartment/${open[1]}`);
   };
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;

@@ -9,6 +9,7 @@ import EditUserPage from './pages/EditUserPage';
 import LoginPage from './pages/LoginPage';
 import Page404 from './pages/Page404';
 import DepartmentsPage from './pages/DepartmentsPage';
+import EditDepartmentPage from './pages/EditDepartmentPage';
 import EmployeesPage from './pages/EmployeesPage';
 
 import ProtectedComponent from './components/protected-component';
@@ -27,9 +28,10 @@ export default function Router() {
       children: [
         { element: <Navigate to="/employees" />, index: true },
         { path: 'users', element: <UsersPage /> },
-        { path: 'editUser', element: <EditUserPage /> },
+        { path: 'editUser/:userId', element: <EditUserPage /> },
         { path: 'employees', element: <EmployeesPage /> },
         { path: 'departments', element: <DepartmentsPage /> },
+        { path: 'editDepartment/:departmentId', element: <EditDepartmentPage /> },
         { path: 'logs', element: <LogsPage /> },
       ],
     },
