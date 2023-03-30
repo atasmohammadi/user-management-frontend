@@ -14,3 +14,8 @@ export const updateUser = async (params) => {
   const res = await http.put(`/user`, params);
   return res.data;
 };
+
+export const deleteUser = async (id) => {
+  const res = await http.delete(`/user/${id}`);
+  return res.data;
+};

@@ -10,14 +10,15 @@ import { useAuth } from '../../../hooks/useAuth';
 // ----------------------------------------------------------------------
 
 export default function LoginForm({ isLoginForm }) {
-  const { login } = useAuth();
+  const { login, register } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    await login(email, password);
+    const fn = isLoginForm ? login : register;
+    await fn(email, password);
   };
 
   return (

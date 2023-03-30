@@ -27,7 +27,7 @@ import Scrollbar from '../components/scrollbar';
 import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
 // mock
 // import data from '../_mock/user';
-import { useUsers } from '../hooks/useUsers';
+import { useUsers, useUsersMutation } from '../hooks/useUsers';
 import { applySortFilter, getComparator } from '../utils/listHelpers';
 
 // ----------------------------------------------------------------------
@@ -48,10 +48,11 @@ export default function UserPage() {
   const [orderBy, setOrderBy] = useState('name');
   const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const { data, isLoading, isError, error } = useUsers();
+  const { data, isLoading, isError } = useUsers();
+  const { remove } = useUsersMutation();
 
-  const handleOpenMenu = (event) => {
-    setOpen(event.currentTarget);
+  const handleOpenMenu = (event, id) => {
+    setOpen([event.currentTarget, id]);
   };
 
   const handleCloseMenu = () => {
@@ -100,6 +101,15 @@ export default function UserPage() {
   const handleFilterByName = (event) => {
     setPage(0);
     setFilterName(event.target.value);
+  };
+
+  const onDelete = () => {
+    if (!open) return;
+    remove.mutate(open[1]);
+  };
+
+  const onEdit = () => {
+    console.log(open[1]);
   };
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
@@ -161,7 +171,7 @@ export default function UserPage() {
                         <TableCell align="left">{permissions.join(', ')}</TableCell>
 
                         <TableCell align="right">
-                          <IconButton size="large" color="inherit" onClick={handleOpenMenu}>
+                          <IconButton size="large" color="inherit" onClick={(event) => handleOpenMenu(event, id)}>
                             <Iconify icon={'eva:more-vertical-fill'} />
                           </IconButton>
                         </TableCell>
@@ -216,7 +226,7 @@ export default function UserPage() {
 
       <Popover
         open={Boolean(open)}
-        anchorEl={open}
+        anchorEl={open ? open[0] : null}
         onClose={handleCloseMenu}
         anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
@@ -232,12 +242,12 @@ export default function UserPage() {
           },
         }}
       >
-        <MenuItem>
+        <MenuItem onClick={onEdit}>
           <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
           Edit
         </MenuItem>
 
-        <MenuItem sx={{ color: 'error.main' }}>
+        <MenuItem sx={{ color: 'error.main' }} onClick={onDelete}>
           <Iconify icon={'eva:trash-2-outline'} sx={{ mr: 2 }} />
           Delete
         </MenuItem>

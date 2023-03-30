@@ -19,3 +19,8 @@ export const createEmployee = async (params) => {
   const res = await http.post(`/employee`, params);
   return res.data;
 };
+
+export const deleteEmployee = async (id) => {
+  const res = await http.delete(`/employee/${id}`);
+  return res.data;
+};

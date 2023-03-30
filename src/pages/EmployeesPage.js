@@ -27,7 +27,7 @@ import Scrollbar from '../components/scrollbar';
 import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
 // mock
 // import data from '../_mock/user';
-import { useEmployees } from '../hooks/useEmployees';
+import { useEmployees, useEmployeesMutation } from '../hooks/useEmployees';
 import { applySortFilter, getComparator } from '../utils/listHelpers';
 
 // ----------------------------------------------------------------------
@@ -51,9 +51,10 @@ export default function EmployeesPage() {
   const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const { data, isLoading, isError, error } = useEmployees();
+  const { remove } = useEmployeesMutation();
 
-  const handleOpenMenu = (event) => {
-    setOpen(event.currentTarget);
+  const handleOpenMenu = (event, id) => {
+    setOpen([event.currentTarget, id]);
   };
 
   const handleCloseMenu = () => {
@@ -102,6 +103,15 @@ export default function EmployeesPage() {
   const handleFilterByName = (event) => {
     setPage(0);
     setFilterName(event.target.value);
+  };
+
+  const onDelete = () => {
+    if (!open) return;
+    remove.mutate(open[1]);
+  };
+
+  const onEdit = () => {
+    console.log(open[1]);
   };
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
@@ -172,7 +182,7 @@ export default function EmployeesPage() {
                         </TableCell> */}
 
                         <TableCell align="right">
-                          <IconButton size="large" color="inherit" onClick={handleOpenMenu}>
+                          <IconButton size="large" color="inherit" onClick={(event) => handleOpenMenu(event, id)}>
                             <Iconify icon={'eva:more-vertical-fill'} />
                           </IconButton>
                         </TableCell>
@@ -227,7 +237,7 @@ export default function EmployeesPage() {
 
       <Popover
         open={Boolean(open)}
-        anchorEl={open}
+        anchorEl={open ? open[0] : null}
         onClose={handleCloseMenu}
         anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
@@ -243,12 +253,12 @@ export default function EmployeesPage() {
           },
         }}
       >
-        <MenuItem>
+        <MenuItem onClick={onEdit}>
           <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
           Edit
         </MenuItem>
 
-        <MenuItem sx={{ color: 'error.main' }}>
+        <MenuItem sx={{ color: 'error.main' }} onClick={onDelete}>
           <Iconify icon={'eva:trash-2-outline'} sx={{ mr: 2 }} />
           Delete
         </MenuItem>

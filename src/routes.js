@@ -5,6 +5,7 @@ import SimpleLayout from './layouts/simple';
 //
 import LogsPage from './pages/LogsPage';
 import UsersPage from './pages/UsersPage';
+import EditUserPage from './pages/EditUserPage';
 import LoginPage from './pages/LoginPage';
 import Page404 from './pages/Page404';
 import DepartmentsPage from './pages/DepartmentsPage';
@@ -26,6 +27,7 @@ export default function Router() {
       children: [
         { element: <Navigate to="/employees" />, index: true },
         { path: 'users', element: <UsersPage /> },
+        { path: 'editUser', element: <EditUserPage /> },
         { path: 'employees', element: <EmployeesPage /> },
         { path: 'departments', element: <DepartmentsPage /> },
         { path: 'logs', element: <LogsPage /> },
