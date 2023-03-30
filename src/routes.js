@@ -11,6 +11,7 @@ import Page404 from './pages/Page404';
 import DepartmentsPage from './pages/DepartmentsPage';
 import EditDepartmentPage from './pages/EditDepartmentPage';
 import EmployeesPage from './pages/EmployeesPage';
+import EditEmployeePage from './pages/EditEmployeePage';
 
 import ProtectedComponent from './components/protected-component';
 
@@ -30,6 +31,7 @@ export default function Router() {
         { path: 'users', element: <UsersPage /> },
         { path: 'editUser/:userId', element: <EditUserPage /> },
         { path: 'employees', element: <EmployeesPage /> },
+        { path: 'editEmployee/:employeeId', element: <EditEmployeePage /> },
         { path: 'departments', element: <DepartmentsPage /> },
         { path: 'editDepartment/:departmentId', element: <EditDepartmentPage /> },
         { path: 'logs', element: <LogsPage /> },
