@@ -1,7 +1,7 @@
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 
-const ProtectedComponent = ({ children }) => {
+const AuthenticatedComponent = ({ children }) => {
   const { user } = useAuth();
   if (!user) {
     // user is not authenticated
@@ -10,4 +10,4 @@ const ProtectedComponent = ({ children }) => {
   return children;
 };
 
-export default ProtectedComponent;
+export default AuthenticatedComponent;
