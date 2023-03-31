@@ -1,5 +1,12 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getDepartment, getDepartments, createDepartment, updateDepartment, deleteDepartment } from '../api/department';
+import {
+  getDepartment,
+  getDepartments,
+  createDepartment,
+  createDepartments,
+  updateDepartment,
+  deleteDepartment,
+} from '../api/department';
 import { useSnackbar } from './useSnackbar';
 
 export const useDepartments = () => useQuery({ queryKey: ['departments'], queryFn: getDepartments });
@@ -15,6 +22,14 @@ export const useDepartmentsMutation = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['departments'] });
       showSnackbar('Department created successfully', 'success');
+    },
+  });
+
+  const batchCreate = useMutation({
+    mutationFn: createDepartments,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['employees'] });
+      showSnackbar('Departments created successfully', 'success');
     },
   });
 
@@ -34,5 +49,5 @@ export const useDepartmentsMutation = () => {
     },
   });
 
-  return { create, update, remove };
+  return { create, update, remove, batchCreate };
 };

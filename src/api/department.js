@@ -20,6 +20,11 @@ export const createDepartment = async (params) => {
   return res.data;
 };
 
+export const createDepartments = async (params) => {
+  const res = await http.post(`/department/batch`, params);
+  return res.data;
+};
+
 export const deleteDepartment = async (id) => {
   const res = await http.delete(`/department/${id}`);
   return res.data;

@@ -141,6 +141,13 @@ export default function EmployeesPage() {
           <Button
             variant="contained"
             startIcon={<Iconify icon="eva:plus-fill" />}
+            onClick={() => navigate('/newEmployees')}
+          >
+            Import Employees (CSV)
+          </Button>
+          <Button
+            variant="contained"
+            startIcon={<Iconify icon="eva:plus-fill" />}
             onClick={() => navigate('/newEmployee')}
           >
             New Employee

@@ -20,6 +20,11 @@ export const createEmployee = async (params) => {
   return res.data;
 };
 
+export const createEmployees = async (params) => {
+  const res = await http.post(`/employee/batch`, params);
+  return res.data;
+};
+
 export const deleteEmployee = async (id) => {
   const res = await http.delete(`/employee/${id}`);
   return res.data;

@@ -1,5 +1,12 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getEmployee, getEmployees, createEmployee, updateEmployee, deleteEmployee } from '../api/employee';
+import {
+  getEmployee,
+  getEmployees,
+  createEmployee,
+  createEmployees,
+  updateEmployee,
+  deleteEmployee,
+} from '../api/employee';
 import { useSnackbar } from './useSnackbar';
 
 export const useEmployees = () => useQuery({ queryKey: ['employees'], queryFn: getEmployees });
@@ -12,6 +19,14 @@ export const useEmployeesMutation = () => {
 
   const create = useMutation({
     mutationFn: createEmployee,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['employees'] });
+      showSnackbar('Employee created successfully', 'success');
+    },
+  });
+
+  const batchCreate = useMutation({
+    mutationFn: createEmployees,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['employees'] });
       showSnackbar('Employee created successfully', 'success');
@@ -34,5 +49,5 @@ export const useEmployeesMutation = () => {
     },
   });
 
-  return { create, update, remove };
+  return { create, update, remove, batchCreate };
 };

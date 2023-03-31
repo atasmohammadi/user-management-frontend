@@ -2,7 +2,7 @@ import { Navigate, useRoutes } from 'react-router-dom';
 // layouts
 import DashboardLayout from './layouts/dashboard';
 import SimpleLayout from './layouts/simple';
-//
+// pages
 import LogsPage from './pages/LogsPage';
 import UsersPage from './pages/UsersPage';
 import EditUserPage from './pages/EditUserPage';
@@ -15,7 +15,8 @@ import NewDepartmentPage from './pages/NewDepartmentPage';
 import EmployeesPage from './pages/EmployeesPage';
 import EditEmployeePage from './pages/EditEmployeePage';
 import NewEmployeePage from './pages/NewEmployeePage';
-
+import NewEmployeesPage from './pages/NewEmployeesPage';
+// components
 import AuthenticatedComponent from './components/authenticated-component';
 import AuthorizedComponent from './components/authorized-component';
 
@@ -54,6 +55,14 @@ export default function Router() {
           element: (
             <AuthorizedComponent requiredPermissions={['admin']}>
               <NewEmployeePage />
+            </AuthorizedComponent>
+          ),
+        },
+        {
+          path: 'newEmployees',
+          element: (
+            <AuthorizedComponent requiredPermissions={['admin']}>
+              <NewEmployeesPage />
             </AuthorizedComponent>
           ),
         },

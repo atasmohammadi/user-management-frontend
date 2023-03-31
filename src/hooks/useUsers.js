@@ -9,7 +9,7 @@ export const useUser = (id) => useQuery({ queryKey: ['user', id], queryFn: () =>
 
 export const useCurrentUser = () => {
   const { user } = useAuth();
-  return useQuery({ queryKey: ['user', user.id], queryFn: () => getUser(user.id), enabled: !!user.id });
+  return useQuery({ queryKey: ['user', user.id], queryFn: () => user });
 };
 
 export const useUsersMutation = () => {
