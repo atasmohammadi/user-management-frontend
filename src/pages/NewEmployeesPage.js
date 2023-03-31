@@ -32,6 +32,7 @@ export default function NewEmployeesPage() {
     if (!arr.length) return;
     try {
       const departmentsToBeCreated = [];
+      // requirements were not clear. what are the required fields? for now firstName and Department are required.
       const filteredArr = arr.filter((i) => i.Vorname && i.Abteilung);
       filteredArr.forEach((a) => {
         const found = departmentsData.find((d) => d.name.toLowerCase() === a.Abteilung.toLowerCase());
@@ -45,8 +46,9 @@ export default function NewEmployeesPage() {
       const employeesToBeCreated = filteredArr
         .filter((j) => {
           const deptId = findDepId(j.Abteilung);
+          // requirements were not clear. ideally we should check more fields to see if an employee already exists. maybe an employee id?
           const foundEmployee = employeesData.find(
-            (em) => em.firstName.toLowerCase() === j.Vorname.toLowerCase() && em.department === deptId
+            (em) => em.firstName.toLowerCase() === j.Vorname.toLowerCase() && em.department.id === deptId
           );
           if (foundEmployee) return false;
           return true;
@@ -61,9 +63,13 @@ export default function NewEmployeesPage() {
             address: `${i.Strasse} ${i.Nr}, ${i.PLZ} ${i.Ort}, ${i.Land}`,
           };
         });
-      const emps = await batchCreateEmployees.mutateAsync({ employees: employeesToBeCreated });
-      showSnackbar(`${emps.length} Employees Created Successfullly`, 'success');
-      navigate('/employees');
+      if (batchCreateEmployees.length) {
+        const emps = await batchCreateEmployees.mutateAsync({ employees: employeesToBeCreated });
+        showSnackbar(`${emps.length} Employees Created Successfullly`, 'success');
+        navigate('/employees');
+      } else {
+        showSnackbar('Imported Employees already exist. no new employee has been created', 'error');
+      }
     } catch (e) {
       showSnackbar(`Something went wrong`, 'error');
       console.log(e);

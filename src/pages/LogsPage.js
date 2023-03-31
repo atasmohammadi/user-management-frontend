@@ -134,7 +134,7 @@ export default function LogsPage() {
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
                     const { id, time, user, action, employee, department } = row;
                     const selectedItem = selected.indexOf(id) !== -1;
-
+                    if (!employee) return <></>;
                     return (
                       <TableRow hover key={id} tabIndex={-1} role="checkbox" selected={selectedItem}>
                         <TableCell padding="checkbox">
